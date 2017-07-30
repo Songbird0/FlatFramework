@@ -1,52 +1,52 @@
 Guide d'installation de FlatFramework
 -------------------------------------
 
-Pour commencer nous allons commencer par installer PHP, nous utiliserons la version 7.
-Pour installer PHP 7 vous devez avoir ca-certificates d'installer sur votre machine si ce n'est pas le cas exécuté la commande suivante :
+Pour commencer il vous faut PHP, nous utiliserons la version 7.
+Pour installer PHP 7 vous devez avoir ca-certificates d'installer sur votre machine si ce n'est pas le cas, exécutez la commande suivante :
 
     apt-get install ca-certificates
 
-Ensuite vous pouvez installer les prérequis pour l'installation de  PHP via les commandes suivantes :
+Ensuite vous pouvez installer les prérequis pour l'installation de PHP via les commandes suivantes :
 
     echo "deb http://packages.dotdeb.org jessie all" > /etc/apt/sources.list.d/dotdeb.list
     wget -O- https://www.dotdeb.org/dotdeb.gpg | apt-key add -
     apt update
 
-Note : Si PHP 5 est installer vous devez le désinstaller via les commandes suivantes :
+Note : Si PHP 5 est installé, vous devez le désinstaller via les commandes suivantes :
 
     systemctl stop php5-fpm
     apt-get autoremove --purge php5
 
 
-**Il est possible d'utilisé Flat Framework sur apache mais nous recommandons Nginx L'instllation qui suit sera donc sous nginx**
+**Il est possible d'utiliser Flat Framework sur apache mais nous recommandons Nginx. L'installation qui suit sera donc sous nginx**
 
-Vous pouvez maintenant installer PHP via c'est commandes :
+Vous pouvez maintenant installer PHP via ces commandes :
 
     apt install php7.0 php7.0-fpm php7.0-mysql php7.0-curl php7.0-json php7.0-gd php7.0-mcrypt php7.0-msgpack php7.0-memcached php7.0-intl php7.0-sqlite3 php7.0-gmp php7.0-geoip php7.0-mbstring php7.0-xml php7.0-zip
 
-nous allons maintenant installé nginx
+Nous allons maintenant installer nginx.
 
     apt install nginx
 
-Nous installons git pour récupéré le framework
+Nous installons git pour récupérer le framework.
 
     apt install git
 
-Nous devons ensuite nous rendre dans le dossier courant de notre site web (la plupart du temps "/var/www/html/")
+Nous devons ensuite nous rendre dans le dossier courant de notre site web (la plupart du temps "/var/www/html/").
 
     cd /var/www/html/
     git clone https://github.com/PHMarc/FlatFramework.git
 
-Nous allons maintenant configuré Ngnix pour FlatFramework
+Nous allons maintenant configurer Ngnix pour FlatFramework.
 
-NOTE: Il est obligatoire d'avoir un FQDN (Fully qualified domaine name)  pour utilisé flat sinon vous ne pourrez pas utiliser le realtime proposer par le framework.
+NOTE: Il est obligatoire d'avoir un FQDN (Fully qualified domaine name) pour utiliser flat sinon vous ne pourrez pas utiliser le realtime proposer par le framework.
 
-Pour configuré ngnix nous devons nous rendre dans /etc/nginx/sites-enabled/
+Pour configurer ngnix nous devons nous rendre dans /etc/nginx/sites-enabled/
 
     cd /etc/nginx/sites-enabled/
 
 
-Dans ce dossier il y a un fichier "default" il faut édité ce fichier comme l'exemple suivant le montre :
+Dans ce dossier il y a un fichier "default" il faut éditer ce fichier comme l'exemple suivant le montre :
 
     ################################## default ##################################
     map $http_upgrade $connection_upgrade {
@@ -122,30 +122,30 @@ Dans ce dossier il y a un fichier "default" il faut édité ce fichier comme l'e
 
     ############################### end default #################################
 
-Avant de redémarrer nginx il vous faut un certificat SSL
-nous allons donc installé les composant pour et généré le certificat
+Avant de redémarrer nginx il vous faut un certificat SSL,
+nous allons donc installer les composants pour générer le certificat
 
-Note: ce cetificat n'est pas reconnus par une autorité de certfication il affichera donc une alert a touts les utilisateurs qui accederons au site Vous pouvez utilisé CloudFalre pour emulé la certification de votre certificat ou utilisé votre propre certificat signé!
+Note: Ce cetificat n'est pas reconnu par une autorité de certfication, il affichera donc une alerte à tous les utilisateurs qui accéderont au site. Vous pouvez utiliser CloudFlare pour émuler la certification de votre certificat ou utiliser votre propre certificat signé!
 
     cd /root/
     mkdir ssl
     cd ssl
     openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout  /root/ssl/privkey.pem -out  /root/ssl/cacert.pem
 
-il faut ensuite restart nginx
+Il faut ensuite redémarrer nginx
 
     /etc/init.d/nginx restart
 
-Vous devez ensuite configurer quelques permissions .
+Vous devez ensuite configurer quelques permissions.
 
     cd /var/www/html/FlatFramework/
     chmod 777 -Rf app/tmp/
     chmod 777 -Rf resource/
 
 
-Vous venez d'installer flatFramework nous allons maintenant passez a son étape de configuration.
+Vous venez d'installer FlatFramework nous allons maintenant passer à son étape de configuration.
 
-Nous allons commencer par configurer  app/config/app.php
+Nous allons commencer par configurer app/config/app.php
 
      nano app/config/app.php
 
@@ -206,14 +206,14 @@ Nous allons commencer par configurer  app/config/app.php
     define('_CONFIG', $_CONFIG);
 
 
-Je vous invite a configurer votre base de donnée si vous en utilisez une.
+Je vous invite à configurer votre base de donnée si vous en utilisez une.
 
-Si vous voulez utilisé les fonctionnalité du réaltime il est alors nécessaire de configuré le luncher du serveur socket
-il faudra donc installé screen afin de demarrer/stopper  les instances du serveur socket
+Si vous voulez utiliser les fonctionnalités du realtime, il est alors nécessaire de configurer le launcher du serveur socket,
+il faudra donc installer screen afin de démarrer/stopper les instances du serveur socket.
 
     apt install screen
 
-maintenant nous allons nous rendre dans /home et créer un fichier start_socket.sh
+Maintenant nous allons nous rendre dans /home et créer un fichier start_socket.sh
 
     cd /home && nano start_socket.sh
 
@@ -231,15 +231,15 @@ maintenant nous allons nous rendre dans /home et créer un fichier start_socket.
     ################### end start_socket.sh ####################################
 
 > Note : si vous avez configuré plusieurs serveur socket dans ngnix il
-> sera nécessaire d'adapté ce fichier
+> sera nécessaire d'adapter ce fichier
 >
-> Note : si vous choisissez de lancé plusieurs instance de serveur
-> socket il sera alors néssaisare d'édité la configuration de ngnix
+> Note : si vous choisissez de lancer plusieurs instance de serveur
+> socket il sera alors nécessaire d'éditer la configuration de ngnix
 
-Pour lancé le(s) serveur(s) socket
+Pour lancer le(s) serveur(s) socket
 
     sh /home/start_socket.sh start
 
-Pour stoppé le(s) serveur(s) socket (empéchera toute navigation sur votre site internet et empêchera le chargement des éléments load dynamiquement)
+Pour stopper le(s) serveur(s) socket (empêchera toute navigation sur votre site internet et empêchera le chargement des éléments chargés dynamiquement)
 
     sh /home/start_socket.sh stop
