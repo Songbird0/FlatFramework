@@ -13,8 +13,9 @@
 <div id="main">
     @yield('content')
 </div>
+<script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="@asset('flat.js')"></script>
 <script src="@asset('app.js')"></script>
-<script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
+
 </body>
 </html>
