@@ -150,7 +150,7 @@ abstract class WebSocket
      * @param $user
      * @param $message
      */
-    protected function send($user, $message)
+    public function send($user, $message)
     {
 
         if ($user->handshake) {

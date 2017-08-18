@@ -2,6 +2,9 @@
 
 namespace PrivateHeberg\Flat;
 
+use PrivateHeberg\Flat\Socket\WebSocket;
+use Privateheberg\Flat\Socket\WebSocketUser;
+use Socket;
 use Traversable;
 
 class Router
@@ -18,6 +21,9 @@ class Router
         '**' => '.++',
         ''   => '[^/\.]++'
     );
+    /** @var  WebSocket */
+    protected $wss;
+    protected   $wssuser;
 
     /**
      * Create router in one call from config.
@@ -148,14 +154,17 @@ class Router
     /**
      * Match a given Request Url against stored routes
      *
+     * @param $socket Socket
+     * @param $socket_user WebSocketUser
      * @param string $requestUrl
      * @param string $requestMethod
      *
-     * @return array|boolean Array with route information on success, false on failure (no match).
+     * @return array|bool Array with route information on success, false on failure (no match).
      */
-    public function match($requestUrl = null, $requestMethod = null)
+    public function match($socket, $socket_user,  $requestUrl = null, $requestMethod = null)
     {
-
+        $this->wss = $socket;
+        $this->wssuser = $socket_user;
         $params = array();
 
 
@@ -341,10 +350,10 @@ class Router
                 'uri'    => $url,
                 'strict' => true
             );
+            $this->wss->send($this->wssuser, json_encode($action));
         } else {
             header('Location: ' . $url);
             exit();
         }
-        echo json_encode($action);
     }
 }

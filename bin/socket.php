@@ -23,7 +23,7 @@ class Socket extends WebSocketServer
     protected function onUpdate(WebSocketUser $user, BasePacket $message)
     {
         ob_start();
-        new Bootstrap(['emulate_route' => $message->path, 'emulate_method' => 'GET', 'update' => true]);
+        new Bootstrap(['socket' => $this, 'user' => $user,  'emulate_route' => $message->path, 'emulate_method' => 'GET', 'update' => true]);
         $buffer_result = ob_get_clean();
         if ($this->isJson($buffer_result)) {
             $this->send($user, $buffer_result);
@@ -44,7 +44,7 @@ class Socket extends WebSocketServer
     protected function onPost(WebSocketUser $user, BasePacket $message)
     {
         ob_start();
-        new Bootstrap(['emulate_route' => $message->path, 'emulate_method' => 'POST', 'update' => false]);
+        new Bootstrap(['socket' => $this, 'emulate_route' => $message->path, 'emulate_method' => 'POST', 'update' => false]);
         $buffer_result = ob_get_clean();
         if ($this->isJson($buffer_result)) {
             $this->send($user, $buffer_result);
@@ -62,7 +62,7 @@ class Socket extends WebSocketServer
     protected function onGet(WebSocketUser $user, BasePacket $message)
     {
         ob_start();
-        new Bootstrap(['emulate_route' => $message->path, 'emulate_method' => 'GET', 'update' => false]);
+        new Bootstrap(['socket' => $this, 'emulate_route' => $message->path, 'emulate_method' => 'GET', 'update' => false]);
         $buffer_result = ob_get_clean();
 
         if ($this->isJson($buffer_result)) {
@@ -82,7 +82,7 @@ class Socket extends WebSocketServer
     {
 
         ob_start();
-        new Bootstrap(['emulate_route' => $message->path, 'emulate_method' => 'GET', 'update' => false]);
+        new Bootstrap(['socket' => $this, 'emulate_route' => $message->path, 'emulate_method' => 'GET', 'update' => false]);
         $buffer_result = ob_get_clean();
 
 
