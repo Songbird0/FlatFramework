@@ -120,6 +120,8 @@ abstract class WebSocket
                     }
                 }
             }
+
+            usleep(1000);
         }
     } // Called immediately when the data is recieved.
 
@@ -150,7 +152,7 @@ abstract class WebSocket
      * @param $user
      * @param $message
      */
-    public function send($user, $message)
+    protected function send($user, $message)
     {
 
         if ($user->handshake) {
