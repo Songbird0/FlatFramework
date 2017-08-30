@@ -20,17 +20,6 @@ class Bootstrap
     public function __construct(array $args = null)
     {
 
-        if(isset( $args['socket'])) {
-            $socket = $args['socket'];
-        } else {
-            $socket = false;
-        }
-
-        if(isset( $args['user'])) {
-            $socket_user = $args['user'];
-        } else {
-            $socket_user = false;
-        }
 
         $router = new Router();
 
@@ -58,14 +47,14 @@ class Bootstrap
 
         if ($args != null) {
             if (isset($args['update']) && isset($args['emulate_route']) && isset($args['emulate_method'])) {
-                $route_match = $this->router->match($socket, $socket_user, $args['emulate_route'], $args['emulate_method']);
+                $route_match = $this->router->match($args['emulate_route'], $args['emulate_method']);
             } else {
                 throw new BootstrapArgumentException("Error with args on Boostrap proccesing");
             }
 
 
         } else {
-            $route_match = $this->router->match($socket, $socket_user);
+            $route_match = $this->router->match();
         }
 
 
