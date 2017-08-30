@@ -7,7 +7,8 @@ use ReflectionClass;
 use ReflectionProperty;
 
 
-class Model {
+class Model
+{
     public $id;
     /** @var \NotORM */
     private $connexion;
@@ -25,12 +26,10 @@ class Model {
      * Retourne le nom de la table
      * @return string table name
      */
-    private static function getTable()
-    {
+    private static function getTable() {
         $rc = new ReflectionClass(get_called_class());
         $annon = $rc->getDocComment();
         preg_match_all('/\@table (.*)/', $annon, $matches, PREG_SET_ORDER, 0);
-
         return str_replace(' ', '', $matches[0][1]);
 
     }
@@ -40,12 +39,10 @@ class Model {
      * Retourne l'id de la pbb
      * @return int BDDID
      */
-    private static function getBDD()
-    {
+    private static function getBDD() {
         $rc = new ReflectionClass(get_called_class());
         $annon = $rc->getDocComment();
         preg_match_all('/\@table (.*)/', $annon, $matches, PREG_SET_ORDER, 0);
-
         return intval(str_replace(' ', '', $matches[0][1]));
     }
 
@@ -72,25 +69,13 @@ class Model {
         }
 
         $array = self::toArray($req);
-
         return self::deserialize($array);
 
 
     }
 
-    public function remove()
-    {
-        $table = $this->table;
-        $insert = $this->connexion->$table(['id' => $this->id])->delete();
-        if ($insert)
-            return true;
-
-        return false;
-    }
-
     /**
      * Retourne le nombre d'occurence dans la table dbb
-     *
      * @param null $where
      * @param array ...$array
      *
@@ -101,7 +86,6 @@ class Model {
         $table = self::getTable();
         $dbid = self::getBDD();
         $connexion = BasicWrapper::getDatabase($dbid);
-
         return intval($connexion->$table()->where($where, $array)->count('id'));
     }
 
@@ -163,7 +147,10 @@ class Model {
     public function update()
     {
         $table = $this->table;
-        if ($this->connexion->$table()->where('id = ?', $this->id)->update(self::toArray($this)))
+        if ($this->connexion->$table()->where('id = ?', $this->id)->update(
+            self::toArray($this)
+        )
+        )
             return true;
 
         return false;
@@ -174,12 +161,14 @@ class Model {
      * Insert L'objet courant en bdd
      * @return bool
      */
-    public function insert()
+    public  function insert()
     {
         $table = $this->table;
         $array = static::toArray($this);
         unset($array['id']);
-        $insert = $this->connexion->$table()->insert($array);
+        $insert = $this->connexion->$table()->insert(
+            $array
+        );
         $this->id = $insert['id'];
         if ($insert)
             return true;
@@ -191,7 +180,6 @@ class Model {
     /**
      *
      * Convertit un object en array
-     *
      * @param $data object
      *
      * @return array
