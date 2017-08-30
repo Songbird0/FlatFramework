@@ -15,6 +15,8 @@ class Model
     private $table;
     private $dbid;
 
+    private $limit = null;
+    private $order = null;
     public function __construct()
     {
         $this->table = self::getTable();
@@ -86,6 +88,9 @@ class Model
         $table = self::getTable();
         $dbid = self::getBDD();
         $connexion = BasicWrapper::getDatabase($dbid);
+        if($where == null) {
+            return intval($connexion->$table()->count('id'));
+        }
         return intval($connexion->$table()->where($where, $array)->count('id'));
     }
 
