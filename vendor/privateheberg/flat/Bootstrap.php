@@ -5,14 +5,14 @@ namespace PrivateHeberg\Flat;
 
 use PrivateHeberg\Flat\Event\Event;
 use PrivateHeberg\Flat\Event\EventWrapper\FinishLoadEvent;
+use PrivateHeberg\Flat\Event\EventWrapper\PreLoadingEvent;
 use PrivateHeberg\Flat\Exception\ActionNotFoundException;
 use PrivateHeberg\Flat\Exception\BadRouteSyntaxeException;
 use PrivateHeberg\Flat\Exception\BootstrapArgumentException;
 use PrivateHeberg\Flat\Exception\ControllerNotFoundException;
 use PrivateHeberg\Flat\Exception\RouterNotFoundException;
 
-class Bootstrap
-{
+class Bootstrap {
     public  $route_list;
     public  $isUpdate;
     private $router;
@@ -78,13 +78,22 @@ class Bootstrap
 
                             if (method_exists($class, 'setProcess')) { //Si la method setProcess existe
 
-                                call_user_func_array(array($class, 'setProcess'), array($this)); //On set le boostrap dans le controller
-                                call_user_func_array(array($class, $methodName), $route_match['params']); //On call la methode
+                                $preloadEvent = new PreLoadingEvent();
+                                $preloadEvent->setErrorCode(200);
+                                $preloadEvent->setRoute($route_match['target']);
+                                $preloadEvent->setSocket(SOCKET);
 
-                                $loadEvent = new FinishLoadEvent();
-                                $loadEvent->setErrorCode(200);
-                                Event::call('onFinishLoader', $loadEvent);
+                                Event::call('PreLoadingEvent', $preloadEvent);
+                                if (!$preloadEvent->getCancel()) {
+                                    call_user_func_array(array($class, 'setProcess'), array($this)); //On set le boostrap dans le controller
+                                    call_user_func_array(array($class, $methodName), $route_match['params']); //On call la methode
 
+                                    $loadEvent = new FinishLoadEvent();
+                                    $loadEvent->setErrorCode(200);
+                                    Event::call('onFinishLoader', $loadEvent);
+                                } else {
+                                    throw new ActionNotFoundException("Access on this Controller@Action is cancelled");
+                                }
                             } else { //Si la method setProcess existe pas c'est que la class extends pas de controller
 
                                 throw new ControllerNotFoundException($className . " is not a controller, " . $className . " need extends to Controller");

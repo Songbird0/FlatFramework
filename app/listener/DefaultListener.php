@@ -3,6 +3,7 @@ use PrivateHeberg\Flat\Event\EventListener;
 use PrivateHeberg\Flat\Event\EventWrapper\FinishLoadEvent;
 use PrivateHeberg\Flat\Event\EventWrapper\GetGlobalUpdaterEvent;
 use PrivateHeberg\Flat\Event\EventWrapper\GetUserInfoEvent;
+use PrivateHeberg\Flat\Event\EventWrapper\PreLoadingEvent;
 
 
 /**
@@ -13,7 +14,13 @@ use PrivateHeberg\Flat\Event\EventWrapper\GetUserInfoEvent;
  */
 class DefaultListener extends EventListener {
 
+
     public function onFinishLoader(FinishLoadEvent $e)
+    {
+
+    }
+
+    public function onPreLoading(PreLoadingEvent $e)
     {
 
     }

@@ -12,6 +12,7 @@ namespace PrivateHeberg\Flat\Event;
 use PrivateHeberg\Flat\Event\EventWrapper\FinishLoadEvent;
 use PrivateHeberg\Flat\Event\EventWrapper\GetGlobalUpdaterEvent;
 use PrivateHeberg\Flat\Event\EventWrapper\GetUserInfoEvent;
+use PrivateHeberg\Flat\Event\EventWrapper\PreLoadingEvent;
 use PrivateHeberg\Flat\Exception\NotImplementedException;
 
 
@@ -23,7 +24,7 @@ class  EventListener
 {
 
     /**
-     * Calback call after page login
+     * Calback call after page loading
      *
      * @param FinishLoadEvent $e
      *
@@ -35,6 +36,22 @@ class  EventListener
 
         throw new NotImplementedException("onFinishLoader is not implemented on yours listener");
     }
+
+
+    /**
+     * Calback call beafore page loading
+     *
+     * @param PreLoadingEvent $e
+     *
+     * @throws NotImplementedException
+     */
+    public function onPreLoading(PreLoadingEvent $e)
+    {
+        //IT'S A VIRTUAL METHOD
+
+        throw new NotImplementedException("onPreLoading is not implemented on yours listener");
+    }
+
 
 
     /**
