@@ -82,6 +82,7 @@ class Bootstrap {
                                 $preloadEvent->setErrorCode(200);
                                 $preloadEvent->setRoute($route_match['target']);
                                 $preloadEvent->setSocket(SOCKET);
+                                $preloadEvent->setController($class);
 
                                 Event::call('PreLoadingEvent', $preloadEvent);
                                 if (!$preloadEvent->getCancel()) {

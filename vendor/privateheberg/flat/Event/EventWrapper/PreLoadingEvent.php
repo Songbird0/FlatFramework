@@ -2,12 +2,32 @@
 
 namespace PrivateHeberg\Flat\Event\EventWrapper;
 
+use PrivateHeberg\Flat\Controller;
+
 class PreLoadingEvent
 {
     private $errorCode;
     private $cancel = false;
     private $route;
     private $socket;
+    /** @var  Controller */
+    private $controller;
+
+    /**
+     * @return Controller
+     */
+    public function getController()
+    {
+        return $this->controller;
+    }
+
+    /**
+     * @param Controller $controller
+     */
+    public function setController($controller)
+    {
+        $this->controller = $controller;
+    }
     /**
      * @return mixed
      */
