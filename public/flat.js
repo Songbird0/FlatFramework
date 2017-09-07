@@ -651,16 +651,19 @@ class Flat {
             console.log(type);
         }
 
-        if (type == null || type == '')
+        if (type == null || type == '') {
             return;
-        if (path == null || path == '')
+        }
+        if (path == null || path == '') {
             return;
+        }
 
         var allowed = false;
 
 
-        if (type == "LOAD")
+        if (type == "LOAD") {
             Flat.prototype.onProgressLoading(15, false);
+        }
 
         this.directSend(type, path, get, post, file);
         if (type == "LOAD") {
