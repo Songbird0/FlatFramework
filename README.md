@@ -2,7 +2,7 @@ Guide d'installation de FlatFramework
 -------------------------------------
 
 Pour commencer il vous faut PHP, nous utiliserons la version 7.
-Pour installer PHP 7 vous devez avoir ca-certificates d'installer sur votre machine si ce n'est pas le cas, exécutez la commande suivante :
+Pour installer PHP 7 vous devez avoir `ca-certificates` installé sur votre machine si ce n'est pas le cas, exécutez la commande suivante :
 
     apt-get install ca-certificates
 
@@ -12,7 +12,7 @@ Ensuite vous pouvez installer les prérequis pour l'installation de PHP via les 
     wget -O- https://www.dotdeb.org/dotdeb.gpg | apt-key add -
     apt update
 
-Note : Si PHP 5 est installé, vous devez le désinstaller via les commandes suivantes :
+**Note**: Si PHP 5 est installé, vous devez le désinstaller via les commandes suivantes :
 
     systemctl stop php5-fpm
     apt-get autoremove --purge php5
@@ -32,21 +32,21 @@ Nous installons git pour récupérer le framework.
 
     apt install git
 
-Nous devons ensuite nous rendre dans le dossier courant de notre site web (la plupart du temps "/var/www/html/").
+Nous devons ensuite nous rendre dans le dossier courant de notre site web (la plupart du temps `/var/www/html/`).
 
     cd /var/www/html/
     git clone https://github.com/PHMarc/FlatFramework.git
 
 Nous allons maintenant configurer Ngnix pour FlatFramework.
 
-NOTE: Il est obligatoire d'avoir un FQDN (Fully qualified domaine name) pour utiliser flat sinon vous ne pourrez pas utiliser le realtime proposer par le framework.
+**Note**: Il est obligatoire d'avoir un FQDN (Fully qualified domaine name) pour utiliser flat sinon vous ne pourrez pas utiliser le realtime proposé par le framework.
 
-Pour configurer ngnix nous devons nous rendre dans /etc/nginx/sites-enabled/
+Pour configurer ngnix nous devons nous rendre dans `/etc/nginx/sites-enabled/`.
 
     cd /etc/nginx/sites-enabled/
 
 
-Dans ce dossier il y a un fichier "default" il faut éditer ce fichier comme l'exemple suivant le montre :
+Dans ce dossier il y a un fichier nommé `default` qui doit être édité, comme l'exemple suivant le montre :
 
     ################################## default ##################################
     map $http_upgrade $connection_upgrade {
@@ -125,14 +125,14 @@ Dans ce dossier il y a un fichier "default" il faut éditer ce fichier comme l'e
 Avant de redémarrer nginx il vous faut un certificat SSL,
 nous allons donc installer les composants pour générer le certificat
 
-Note: Ce cetificat n'est pas reconnu par une autorité de certfication, il affichera donc une alerte à tous les utilisateurs qui accéderont au site. Vous pouvez utiliser CloudFlare pour émuler la certification de votre certificat ou utiliser votre propre certificat signé!
+Note: Ce certificat n'est pas reconnu par une autorité de certfication, il affichera donc une alerte à tous les utilisateurs qui accéderont au site. Vous pouvez utiliser CloudFlare pour émuler la certification de votre certificat ou utiliser votre propre certificat signé !
 
     cd /root/
     mkdir ssl
     cd ssl
     openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout  /root/ssl/privkey.pem -out  /root/ssl/cacert.pem
 
-Il faut ensuite redémarrer nginx
+Il faut ensuite redémarrer nginx.
 
     /etc/init.d/nginx restart
 
@@ -143,9 +143,9 @@ Vous devez ensuite configurer quelques permissions.
     chmod 777 -Rf resource/
 
 
-Vous venez d'installer FlatFramework nous allons maintenant passer à son étape de configuration.
+Vous venez d'installer FlatFramework ! Passons maintenant à son étape de configuration.
 
-Nous allons commencer par configurer app/config/app.php
+Nous allons commencer par configurer `app/config/app.php`.
 
      nano app/config/app.php
 
@@ -208,12 +208,12 @@ Nous allons commencer par configurer app/config/app.php
 
 Je vous invite à configurer votre base de donnée si vous en utilisez une.
 
-Si vous voulez utiliser les fonctionnalités du realtime, il est alors nécessaire de configurer le launcher du serveur socket,
-il faudra donc installer screen afin de démarrer/stopper les instances du serveur socket.
+Si vous voulez utiliser les fonctionnalités du realtime, il est alors nécessaire de configurer le launcher du serveur socket.
+`screen` doit être installé afin de démarrer/stopper les instances du serveur socket.
 
     apt install screen
 
-Maintenant nous allons nous rendre dans /home et créer un fichier start_socket.sh
+Maintenant nous allons nous rendre dans `/home` et créer un fichier `start_socket.sh`.
 
     cd /home && nano start_socket.sh
 
@@ -230,13 +230,13 @@ Maintenant nous allons nous rendre dans /home et créer un fichier start_socket.
 
     ################### end start_socket.sh ####################################
 
-> Note : si vous avez configuré plusieurs serveur socket dans ngnix il
-> sera nécessaire d'adapter ce fichier
+> **Note(1)** : si vous avez configuré plusieurs serveur socket dans ngnix il
+> sera nécessaire d'adapter ce fichier.
 >
-> Note : si vous choisissez de lancer plusieurs instance de serveur
-> socket il sera alors nécessaire d'éditer la configuration de ngnix
+> **Note(2)** : si vous choisissez de lancer plusieurs instance de serveur
+> socket, il sera alors nécessaire d'éditer la configuration de ngnix.
 
-Pour lancer le(s) serveur(s) socket
+Pour lancer le(s) serveur(s) socket:
 
     sh /home/start_socket.sh start
 
